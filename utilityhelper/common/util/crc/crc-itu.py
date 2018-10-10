@@ -1,5 +1,5 @@
 #coding:utf-8
-
+from __future__ import (print_function, unicode_literals)
 """
 2字节的CRC-ITU 比特位对应校验的数据的比特位之间的关系
 CRC15   =>              3,7
@@ -107,5 +107,5 @@ if __name__ == "__main__":
     data = [0x00, '\x00']
     data = "\x12\x34"
     crc = get_crc_itu(data)
-    print hex(crc), bytearray(crc)
+    print(hex(crc), bytearray(crc))
 

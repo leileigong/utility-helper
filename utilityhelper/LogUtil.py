@@ -1,4 +1,6 @@
 #coding:utf-8
+from __future__ import (print_function, unicode_literals)
+from utilityhelper.compatible import *
 import logging
 import logging.handlers
 import os
@@ -11,8 +13,9 @@ class EncodingFormatter(logging.Formatter):
 
     def format(self, record):
         result = logging.Formatter.format(self, record)
-        if isinstance(result, unicode):
-            result = result.encode(self.encoding or 'utf-8')
+        if not PY3:
+            if isinstance(result, unicode):
+                result = result.encode(self.encoding or 'utf-8')
         return result
 
 class Log(object):
@@ -20,12 +23,13 @@ class Log(object):
     currScriptPath = os.path.split(os.path.realpath(__file__))[0]
     lifile = os.listdir(currScriptPath)
     os.chdir(currScriptPath)
-    logfile = r"Factory.log"
-    logger=logging.getLogger("Factory")
+    logfile = r"testLog.log"
+    logger=logging.getLogger("testLog")
     logger.setLevel(logging.DEBUG)
     # 创建一个handler，用于写入日志文件
-    handler=logging.FileHandler(logfile)
-    
+    # handler=logging.FileHandler(logfile)
+    handler=logging.StreamHandler()
+
     # 定义handler的输出格式
     fmtstr = '[%(asctime)s] [%(levelname)s] [%(name)s] [PID:%(process)d-TID:%(thread)d(%(threadName)s)] -- %(message)s'
     formatter = EncodingFormatter(fmtstr)
@@ -96,3 +100,4 @@ class MailLog(Log):
 
 if __name__ == "__main__":
     Log.Info("11111111111222222222222222")
+    Log.Info("UNICODE中文")

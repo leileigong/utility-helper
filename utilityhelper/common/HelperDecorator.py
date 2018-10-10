@@ -1,6 +1,13 @@
 #coding:utf-8
-import wx
+from __future__ import (print_function, unicode_literals)
 import time
+try:
+    import wx
+except:
+    try:
+        import PyQt5
+    except:
+        pass
 
 def wrapper_call_after(func):
     def _wrapper(*args, **kwargs):
@@ -51,7 +58,7 @@ def wrapper_cpu_exec_time(func):
         start = time.clock()  
         func(*args, **kwargs)
         end =time.clock()
-        print 'used:', end - start
+        print('used:', end - start)
         return end - start
     return wrapper
 
@@ -65,7 +72,7 @@ def wrapper_round_n_float(radix):
 
 def wrapper_print_args(func):
     def _wrapper(*args, **kwargs):
-        print "Arguments were: %s, %s" % (args, kwargs)
+        print("Arguments were: %s, %s" % (args, kwargs))
         ret = func(*args, **kwargs)
         return ret
     return _wrapper

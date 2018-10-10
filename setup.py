@@ -9,8 +9,13 @@ from setuptools import setup, find_packages
 # To use a consistent encoding
 from codecs import open
 from os import path
+import sys
+if sys.version > '3':
+    PY3 = True
+else:
+    PY3 = False
 
-VERSION = '0.1.2'
+VERSION = '0.1.3'
 
 here = path.abspath(path.dirname(__file__))
 
@@ -34,11 +39,12 @@ setup(
             "Programming Language :: Python :: 2",
             "Programming Language :: Python :: 2.6",
             "Programming Language :: Python :: 2.7",
+            "Programming Language :: Python :: 3",
         ],
         keywords='python helper util',
         license="MIT",
         packages=find_packages(exclude=[]),
         install_requires=[
-            'MySQLdb',
+            # 'MySQLdb' if not PY3 else 'pymysql',
         ]
 )

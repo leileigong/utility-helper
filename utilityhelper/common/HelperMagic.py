@@ -1,4 +1,5 @@
 #coding:utf-8
+from __future__ import (print_function, unicode_literals)
 
 def wrapper_round_n_float(radix):
     def flyable_to_return(cls):
@@ -25,7 +26,7 @@ class Round2Float(float):
 
 if __name__ == "__main__":
     f = Round2Float(4.14159)
-    print f
+    print(f)
 
     rr = R()
     # print rr.r(5.1111111)

@@ -1,6 +1,9 @@
 #coding:utf-8
 # !/usr/local/python/bin
 
+from __future__ import (print_function, unicode_literals)
+from utilityhelper.compatible import *
+
 __author__ = "gongleilei"
 __status__ = "Development"
 
@@ -59,8 +62,9 @@ class EncodingFormatter(logging.Formatter):
 
     def format(self, record):
         result = logging.Formatter.format(self, record)
-        if isinstance(result, unicode):
-            result = result.encode(self.encoding or 'utf-8')
+        if not PY3:
+            if isinstance(result, unicode):
+                result = result.encode(self.encoding or 'utf-8')
         return result
 
 class ColoredFormatter(logging.Formatter):
@@ -182,50 +186,8 @@ class LogManger(object):
         
         return LogManger.__add_handler(logging.handlers.SMTPHandler, loggers, level, fmt, True, **kwargs)
 
-if __name__ == '__main__':
-    import wx
-
-    class MyFrame(wx.Frame):
-        def __init__(self, parent, title):
-            wx.Frame.__init__(self, parent, -1, title)
-            self.textctrl = wx.TextCtrl(self, style=wx.TE_MULTILINE)
-            self.Show()
-
-        def write(self, s):
-            self.textctrl.AppendText(s)
-
-    app = wx.App(False)
-    frame = MyFrame(None, 'logging demo')
-
-    fmt='[%(levelname)s] - %(asctime)s - %(name)s - %(message)s'
-
-    log1 = LogManger.getLogger()
-    log2 = LogManger.getLogger("XYZ")
-    log3 = LogManger.getLogger("XYZT.MNT")
-
-    LogManger.addHandler((log1,), HANDLER_TYPE_STREAM, "DEBUG", fmt)
-    
-    LogManger.addHandler((log2,), HANDLER_TYPE_WINDOW, "DEBUG", fmt, window=frame.textctrl)
-
-    LogManger.addHandler((log3,), HANDLER_TYPE_FILE, "ERROR", fmt,
-                         filename="log.txt", mode='a', backup_count=5, limit=20480, when=None)
-    
-    # LogManger.addHandler((log3,), HANDLER_TYPE_STREAM, "ERROR", fmt)
-    # LogManger.addHandler("SMTP", "DEBUG", fmt,
-    #                      mailhost="smtp.qiye.163.com",
-    #                      fromaddr="changjiangadmin@brilliance.com.cn",#'raAutosender@163.com',
-    #                      toaddrs ='gongleilei@brilliance.com.cn',
-    #                      subject='Client Factory Log',
-    #                      credentials = ('changjiangadmin@brilliance.com.cn', 'bchj77277.')
-    #                      #credentials = ('raAutosender@163.com', 'raAutosender123'))
-    #                      )
-    for log in g_logger:
-        print "logger=", log, "logger.handers=", log.handlers
-
-    log1.info("log1 info")
-    log2.info("log2 info")
-    log2.warning("log2 waring")
-    log2.error("log2 error")
-    log3.error("log3 error")
-
-    app.MainLoop()
+if __name__ == "__main__":
+    __fmt = '【%(levelname)s】 - %(asctime)s - %(name)s -%(thread)d -%(threadName)s - %(message)s'
+    _g_logger = LogManger.getLogger(None, LEVEL_DEBUG)
+    LogManger.addHandler((_g_logger,), HANDLER_TYPE_STREAM, LEVEL_DEBUG, __fmt)
+    _g_logger.debug("logdebug={}".format('message'))

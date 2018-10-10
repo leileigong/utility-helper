@@ -1,39 +1,39 @@
 #coding:utf-8
-
+from __future__ import (print_function, unicode_literals)
 #字节串转为16进制字符串
 #"\xff\x01" --> "ff01" 
 def toHexString(strs, sep=''):
-    return sep.join(map(lambda c: "%02X" % ord(c), strs))
+    return sep.join(["%02X" % ord(c) for c in strs])
 
 def bytesToHexStringList(bytes):
     li = []
-    li = map(lambda c: c, bytes)
+    li = [c for c in bytes]
     return li
 
 def bytesToIntergerList(bytes):
     li = []
-    li = map(lambda c: ord(c), bytes) 
+    li = [ord(c) for c in bytes] 
     return li
 
 def bytesToString(bytes):
     return ''.join(map(chr, bytes))
     
 def splitByLength(data, step):
-    hexlist = [data[i:i+step] for i in xrange(0, len(data), step)]
+    hexlist = [data[i:i+step] for i in range(0, len(data), step)]
     return hexlist   
     
 def hexToString(strHex):
-    return ''.join(map(lambda h: chr(int(h, 16)), splitByLength(strHex,2)))
+    return ''.join([chr(int(h, 16)) for h in splitByLength(strHex,2)])
 
 #16进制字符串转为整数列表
 #"ff01" --> [255, 1] 
 def hexStringToIntList(strHex):
-    return map(lambda h: int(h, 16), splitByLength(strHex,2))  
+    return [int(h, 16) for h in splitByLength(strHex,2)]  
 
 #16进制字符串转为字节串
 #"ff01" --> "\xff\x01" 
 def hexStringToBytes(strHex):
-    return "".join(map(lambda h: chr(int(h, 16)), splitByLength(strHex,2))) 
+    return "".join([chr(int(h, 16)) for h in splitByLength(strHex,2)]) 
 
 def BCDtoInteger(bcdBytes):
     IntVal = 0

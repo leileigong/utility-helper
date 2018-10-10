@@ -1,5 +1,5 @@
 #coding:utf-8
-
+from __future__ import (print_function, unicode_literals)
 from Crypto.Cipher import DES3, DES
 
 DEBUG_DES = 1

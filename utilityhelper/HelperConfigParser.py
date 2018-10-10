@@ -4,10 +4,15 @@ Created on 2016年6月24日
 
 @author: Leo
 '''
-
+from __future__ import (print_function, unicode_literals)
 import os
 import sys
-from ConfigParser import *
+from .compatible import *
+
+if PY3:
+    from configparser import *
+else:
+    from ConfigParser import *
 
 class ConfigManager(ConfigParser):
     def __init__(self, cfPath):

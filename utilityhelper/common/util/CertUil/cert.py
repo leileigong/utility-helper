@@ -2,7 +2,7 @@
 '''
 01, 20150626, add function <toDerFmt> to support certificate file encoding format base64 to der.
 '''
-
+from __future__ import (print_function, unicode_literals)
 import base64
 
 from Crypto.Hash import SHA

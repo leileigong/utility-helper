@@ -9,7 +9,7 @@ Created on 2016年7月8日
 
 @author: 龚磊磊
 '''
-
+from __future__ import (print_function, unicode_literals)
 import threading
 
 class WorkerThread(threading.Thread):
