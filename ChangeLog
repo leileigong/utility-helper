@@ -1,0 +1,14 @@
+CHANGES
+=======
+
+v0.1.5
+* 修改若干python2和python3兼容的bug
+
+v0.1.3
+------
+
+* add 'wxrap' for warp some wx class in this module
+* add test
+* support python3
+* init repo v0.1.2
+* Initial commit

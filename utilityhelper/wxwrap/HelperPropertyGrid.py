@@ -3,9 +3,9 @@ import wx
 WX_VERSION = wx.__version__
 
 if WX_VERSION >= '4':
-    from _wx4PropertyGrid import *
+    from ._wx4PropertyGrid import *
 else:
-    from _wx3PropertyGrid import *
+    from ._wx3PropertyGrid import *
 
 
 if __name__ == '__main__':
