@@ -3,11 +3,15 @@
 import codecs
 import os
 import sys
+import platform
 from shutil import rmtree
 
+# from distutils.core import setup, Command
 from setuptools import setup, find_packages, Command
+
 from distutils.command.build        import build as orig_build
-from setuptools.command.install     import install as orig_install
+from distutils.command.install      import install as orig_install
+# from setuptools.command.install     import install as orig_install
 from setuptools.command.bdist_egg   import bdist_egg as orig_bdist_egg
 from setuptools.command.sdist       import sdist as orig_sdist
 try:
@@ -35,6 +39,12 @@ install_required = [
     "setuptools>=36.2.1",
 ]
 
+if platform.platform().startswith("Windows"):
+    os_maj_ver = int(platform.win32_ver()[1].split('.')[0])
+    if int(os_maj_ver) >= 6:
+        install_required.append("pyserial>2.7")  # windows vista and later
+    else:
+        install_required.append("pyserial<=2.7")
 
 # https://pypi.python.org/pypi/stdeb/0.8.5#quickstart-2-just-tell-me-the-fastest-way-to-make-a-deb
 class DebCommand(Command):
@@ -60,11 +70,11 @@ class DebCommand(Command):
             rmtree(os.path.join(here, "deb_dist"))
         except Exception as e:
             pass
-        self.status(u"Creating debian mainfest…")
+        self.status("Creating debian mainfest…")
         os.system(
             "python setup.py --command-packages=stdeb.command sdist_dsc -z artful --package3=pipenv --depends3=python3-virtualenv-clone"
         )
-        self.status(u"Building .deb…")
+        self.status("Building .deb…")
         os.chdir("deb_dist/pipenv-{0}".format(about["__version__"]))
         os.system("dpkg-buildpackage -rfakeroot -uc -us")
 
@@ -131,12 +141,12 @@ class UploadCommand(Command):
 # Map these new classes to the appropriate distutils command names.
 
 CMDCLASS = {
-    # 'build'       : orig_build,
-    # 'bdist_egg'   : orig_bdist_egg,
-    # 'install'     : orig_install,
-    # 'sdist'       : orig_sdist,
-    'upload'        : UploadCommand,
-    'deb'           : DebCommand,
+    'build'       : orig_build,
+    'bdist_egg'   : orig_bdist_egg,
+    'install'     : orig_install,
+    'sdist'       : orig_sdist,
+    'upload'      : UploadCommand,
+    'deb'         : DebCommand,
     }
 
 # if haveWheel:

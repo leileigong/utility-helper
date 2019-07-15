@@ -1,0 +1,2 @@
+pyserial>2.7; sys_platform == 'win32' and int(platform_release) >= 6  # windows vista and later
+pyserial<=2.7; sys_platform == 'win32' and int(platform_release) < 6
