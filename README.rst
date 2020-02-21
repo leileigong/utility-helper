@@ -2,6 +2,10 @@ This is the README file for the project.
 
 this package include some modules which simply wrapper python known packages or modules,
 such as wx, logging and also include utils helping do some other things.
+2020.02.21:
+    0.1.8:
+        1.修复SerialReaderObserver参数名错误
+        2.Synchronization模块，删除apply函数，兼容python2和3
 
 2019.07.16:
     0.1.6:

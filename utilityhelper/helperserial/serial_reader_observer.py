@@ -103,7 +103,7 @@ class SerialReaderObserver(Observer):
         # 新建观察者默认添加到被观察者维护的队列中
         observable.addObserver(self)
 
-    def update(self, observable, argss):
+    def update(self, observable, args):
         plugins, plugouts = args
         self.callback(plugins, plugouts)
 
