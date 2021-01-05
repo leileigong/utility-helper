@@ -19,10 +19,9 @@ from utilityhelper.util.Synchronization import *
 from abc import *
 
 
-class Observer(object):
+class Observer(object, metaclass=ABCMeta):
     """Observer观察者抽象类
     """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def update(self, observable, arg=None):

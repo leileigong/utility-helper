@@ -7,21 +7,31 @@ http://python-3-patterns-idioms-test.readthedocs.org/en/latest/Observer.html
 Simple emulation of Java's 'synchronized'
 keyword, from Peter Norvig.
 """
-
+import functools
 from threading import RLock
 
-
 def synchronized(method):
-
-    def f(*args):
-        self = args[0]
-        self.mutex.acquire()
-        # print method.__name__, 'acquired'
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
         try:
-            return method(*args)
+            self.mutex.acquire()
+            return method(self, *args, **kwargs)
         finally:
             self.mutex.release()
-            # print method.__name__, 'released'
+    return wrapper
+
+
+def synchronized2(method):
+
+    def f(*args, **kwargs):
+        self = args[0]
+        self.mutex.acquire()
+        # print(method.__name__, 'acquired')
+        try:
+            return method(*args, **kwargs)
+        finally:
+            self.mutex.release()
+            # print(method.__name__, 'released')
     return f
 
 
@@ -30,12 +40,12 @@ def synchronize(klass, names=None):
     Only synchronize the methods whose names are
     given, or all methods if names=None."""
     if type(names) == type(''):
-            names = names.split()
-    for (name, val) in klass.__dict__.items():
+        names = names.split()
+    for (name, val) in list(klass.__dict__.items()):
         if callable(val) and name != '__init__' and \
-            (names == None or name in names):
-                # print "synchronizing", name
-                setattr(klass, name, synchronized(val))
+                (names is None or name in names):
+            # print("synchronizing", name)
+            setattr(klass, name, synchronized(val))
 
 
 class Synchronization(object):

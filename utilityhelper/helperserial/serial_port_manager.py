@@ -8,8 +8,20 @@
 #
 """
 # 2017.09.17, gongleilei, pyserial 3.0之后的版本不兼容XP系统，增加对XP系统的兼容
-import serial
-from serial.tools import list_ports
+import platform
+
+if platform.platform().startswith("Windows"):
+    os_maj_ver = platform.win32_ver()[1].split('.')[0]
+    if int(os_maj_ver) >= 6: # windows vista and later
+        import serial
+        from serial.tools import list_ports
+    else:
+        # 兼容XP系统，在XP上只能运行pyserial<3.0
+        from  .. import serial27 as serial
+        from serial.tools import list_ports
+else:
+    import serial
+    from serial.tools import list_ports
 
 
 class SerialPortManager(object):
