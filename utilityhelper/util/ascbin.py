@@ -6,6 +6,7 @@ binascii模块:二进制和ASCII互转.Python版本：1.5及以后版本
     3)偶有使用于字符串和ASCII的转换;
 通常情况不会直接使用这些功能，而是使用像UU，base64编码，或BinHex封装模块。
 """
+import six
 import binascii
 import struct
 import base64
@@ -37,7 +38,7 @@ def string_list_to_string(stringli, sep=''):
     return sep.join(stringli)
 
 
-def int_list_to_string(intli, sep=''):
+def int_list_to_string(intli, sep=b''):
     """整数列表转字符串
     :param intli:
     :param sep:
@@ -45,7 +46,7 @@ def int_list_to_string(intli, sep=''):
     >>> int_list_to_string([1,2])
     '\\x01\\x02'
     """
-    return sep.join([chr(n) for n in intli])
+    return sep.join([six.int2byte(n) for n in intli])
 
 def structedhex_string_to_bytes(hexString, sep1, sep2):
     """十六进制字符串格式化成带特定分隔符的二进制

@@ -124,7 +124,7 @@ class SerialPortManager(object):
             if len(errmesglist) == 2:
                 obj = eval(errmesglist[1])
                 if isinstance(obj, WindowsError):
-                    winerrmsg = str(obj).decode('gbk').encode('utf8')
+                    winerrmsg = str(obj)#.decode('gbk').encode('utf8')
                     raise Exception("{}({})".format(errmesglist[0], winerrmsg))
             raise Exception(errmesglist[0])
         except Exception as e:

@@ -2,6 +2,10 @@ This is the README file for the project.
 
 this package include some modules which simply wrapper python known packages or modules,
 such as wx, logging and also include utils helping do some other things.
+2021.01.28:
+    0.1.10:
+        1. 修复一些python3运行时语法兼容错误
+
 2020.02.21:
     0.1.9:
         1.修复一些python2和3语法兼容错误

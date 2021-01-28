@@ -1,5 +1,5 @@
 #coding:utf-8
-
+import six
 import crc16
 import struct
 from utilityhelper.util import ascbin
@@ -46,11 +46,12 @@ class SerialConnection(object):
 
     def transmit(self, data):
         data = ascbin.int_list_to_string(data)
-        package = chr(0x5A)
-        package += chr(0x5B)
+
+        package = six.int2byte(0x5A)
+        package += six.int2byte(0x5B)
         payloadlen = len(data) + 2  # data + crc
         prototype = 8  # b'1000'
-        package += struct.pack("H", (prototype << 12) + payloadlen)
+        package += struct.pack("H", (prototype << 12) | payloadlen)
         package += data
         cal_crc = crc16.crc16xmodem(package)
         package += struct.pack("H", cal_crc)
@@ -60,13 +61,13 @@ class SerialConnection(object):
         if not resppkgheader:
             raise Exception("serial read time out")
         # print "read header=", ascbin.StringToHex(resppkgheader)
-        if resppkgheader and len(resppkgheader) == 4 and resppkgheader[0] == chr(0x5B):
+        if resppkgheader and len(resppkgheader) == 4 and six.indexbytes(resppkgheader, 0) == 0x5B:
             result = resppkgheader[1]
             data = struct.unpack("H", resppkgheader[2:4])[0]
             prototype = data >> 12
             payloadlen = data & 0x0FFF
             # print "calc proto=", hex(prototype)
-            # print "calc payloadlen=", payloadlen
+            # print("calc payloadlen=", payloadlen)
             payload = self.serialport.read(payloadlen)
             if not payload:
                 raise Exception("serial read time out")
@@ -78,5 +79,5 @@ class SerialConnection(object):
                 rcv_crc = struct.unpack("H", payload[-2:])[0]
                 cal_crc = crc16.crc16xmodem(resppkgheader + payload[:-2])
                 if rcv_crc == cal_crc:
-                    data = map(lambda x: (ord(x) + 256) % 256, data)
+                    data = map(lambda x: (x + 256) % 256, data)
                     return data, sw1, sw2
